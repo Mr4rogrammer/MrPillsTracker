@@ -3,18 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".common.MainApplication"
+        android:name=".core.MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MrPillsTRacker"
+        android:theme="@style/Theme.MrPillsTracker"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".DashBoard.presenter.ui.MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MrPillsTracker" />
+        <activity
+            android:name=".DashBoard.presenter.ui.DashBoard"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

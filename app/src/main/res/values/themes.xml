@@ -5,5 +5,22 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.MrPillsTRacker" parent="Base.Theme.MrPillsTRacker" />
+    <style name="Theme.MrPillsTracker" parent="Base.Theme.MrPillsTRacker" />
+
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <style name="AppTheme.SplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/AppTheme.Launcher</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MrPillsTracker" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
 </resources>

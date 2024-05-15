@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
-    alias(libs.plugins.hiltAndroid)
-    id("realm-android")
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+    id 'realm-android'
 }
 
 android {
@@ -16,7 +17,6 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,7 +37,6 @@ android {
     viewBinding {
         enabled = true
     }
-
     dataBinding {
         enabled = true
     }
@@ -52,14 +51,15 @@ dependencies {
     implementation libs.androidx.activity
     implementation libs.kotlinx.coroutines.core
     implementation libs.kotlinx.coroutines.android
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+
+    kapt libs.androidx.hilt.compiler
+    implementation libs.androidx.core.splashscreen
+    implementation libs.material
 
     implementation libs.hilt.android
     kapt libs.hilt.compiler
-    implementation libs.androidx.hilt.lifecycle.viewmodel
-    kapt libs.androidx.hilt.compiler
 }
 
-
-realm {
-    syncEnabled = true
-}
