@@ -14,7 +14,7 @@
     </style>
 
     <style name="AppTheme.SplashScreen" parent="Theme.SplashScreen">
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/black</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
         <item name="postSplashScreenTheme">@style/AppTheme.Launcher</item>
     </style>

@@ -14,11 +14,10 @@
         android:theme="@style/Theme.MrPillsTracker"
         tools:targetApi="31">
         <activity
-            android:name=".DashBoard.presenter.ui.MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MrPillsTracker" />
-        <activity
             android:name=".DashBoard.presenter.ui.DashBoard"
+            android:exported="false" />
+        <activity
+            android:name=".Login.presenter.ui.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
