@@ -20,7 +20,7 @@ class MainApplication: Application() {
     private fun realmModule() {
         Realm.init(this@MainApplication)
         val configuration = RealmConfiguration.Builder()
-            .name(getString(R.string.app_name))
+            .name(getString(R.string.app_name)+".realm")
             .allowWritesOnUiThread(false)
             .allowQueriesOnUiThread(false)
             .deleteRealmIfMigrationNeeded()

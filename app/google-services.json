@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "473395054011",
+    "firebase_url": "https://mrpillstracker-default-rtdb.firebaseio.com",
+    "project_id": "mrpillstracker",
+    "storage_bucket": "mrpillstracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473395054011:android:bd05269f3ec64ffa84b09e",
+        "android_client_info": {
+          "package_name": "info.mrprogrammer.mrpillstracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473395054011-pj4od7r7egb7cnjpaagnqh55gdm3sh3l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "info.mrprogrammer.mrpillstracker",
+            "certificate_hash": "81c2c9f1955d552eff5d8b42e510ec7c0713e4af"
+          }
+        },
+        {
+          "client_id": "473395054011-c8ck0bdakijq186hqhhn1q2hm6qkb2eo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkKXm0k6a-MDFAXRRAN8D5DwNWbKNf-3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473395054011-c8ck0bdakijq186hqhhn1q2hm6qkb2eo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

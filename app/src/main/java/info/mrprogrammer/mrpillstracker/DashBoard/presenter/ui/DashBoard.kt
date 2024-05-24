@@ -14,7 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import info.mrprogrammer.mrpillstracker.DashBoard.presenter.viewmodel.DashBoardViewModel
+import info.mrprogrammer.mrpillstracker.R
 import info.mrprogrammer.mrpillstracker.core.StatusBarHelper
+import info.mrprogrammer.mrpillstracker.core.domain.model.UserDataModel
+import info.mrprogrammer.mrpillstracker.core.utils.setFadeInAnimation
 import info.mrprogrammer.mrpillstracker.databinding.DashboardMainBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,6 +30,7 @@ class DashBoard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         root = DashboardMainBinding.inflate(layoutInflater)
+        root.root.setFadeInAnimation(this)
         setContentView(root.root)
         StatusBarHelper(this).setColor(window)
         initializeCollector()
@@ -35,15 +39,14 @@ class DashBoard : AppCompatActivity() {
     private fun initializeCollector() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                dashBoardViewModel.splashScreenState.collectLatest {
-                    installSplashScreen().apply {
-                        setKeepOnScreenCondition {
-                            false
-                        }
-                    }
-                    dashBoardViewModel.hideSplashScreen()
+                dashBoardViewModel.userLoginDetails.collectLatest {
+                    updateUserDataToUI(it)
                 }
             }
         }
+    }
+
+    private fun updateUserDataToUI(userDataModel: UserDataModel?) {
+        root.name.text = getString(R.string.hey, userDataModel?.name)
     }
 }

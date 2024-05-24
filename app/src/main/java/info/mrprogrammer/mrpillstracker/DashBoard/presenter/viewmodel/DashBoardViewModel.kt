@@ -1,15 +1,43 @@
 package info.mrprogrammer.mrpillstracker.DashBoard.presenter.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import info.mrprogrammer.mrpillstracker.core.domain.model.UserDataModel
+import info.mrprogrammer.mrpillstracker.core.domain.use_case.GetUserLoginDetails
+import info.mrprogrammer.mrpillstracker.core.domain.use_case.SaveData
+import info.mrprogrammer.mrpillstracker.core.domain.use_case.SyncData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DashBoardViewModel : ViewModel() {
-    private var _splashScreenState = MutableStateFlow(true)
-    val splashScreenState = _splashScreenState.asStateFlow()
+@HiltViewModel
+class DashBoardViewModel @Inject constructor(private val getUserLoginDetails: GetUserLoginDetails,
+    private val syncData: SyncData) :
+    ViewModel() {
+    private val _userLoginDetails = MutableStateFlow<UserDataModel?>(null)
+    val userLoginDetails = _userLoginDetails
 
-    fun hideSplashScreen() {
-        _splashScreenState.update { false }
+    private val _syncState = MutableStateFlow<Boolean>(false)
+    val syncState = _userLoginDetails
+
+    init {
+        viewModelScope.launch {
+            val result = getUserLoginDetails()
+            _userLoginDetails.update { result }
+        }
+
+        viewModelScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                syncData().collect {
+                    _syncState.value = it
+                }
+            }
+        }
     }
+
+
 }
