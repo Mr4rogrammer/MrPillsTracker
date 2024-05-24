@@ -5,7 +5,7 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 
 @RealmClass
-open class MedicationReminder(
+open class MedicineReminder(
     @PrimaryKey
     var id:String = "",
     var afterOrBefore: String  = "",
