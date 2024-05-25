@@ -1,17 +1,19 @@
 package info.mrprogrammer.mrpillstracker.core.frame_work.realm
 
+import androidx.appcompat.widget.ThemedSpinnerAdapter.Helper
 import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineReminder
 import info.mrprogrammer.mrpillstracker.core.frame_work.LocalDataBase
+import info.mrprogrammer.mrpillstracker.core.utils.filterDatesLessThanOrEqualToToday
 import io.realm.Realm
+import io.realm.RealmChangeListener
 import io.realm.RealmModel
-import io.realm.kotlin.toFlow
+import io.realm.RealmResults
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.withContext
 
 class LocalDataBaseImpl: LocalDataBase {
     override suspend fun insert(data: List<Any>) {
@@ -35,15 +37,21 @@ class LocalDataBaseImpl: LocalDataBase {
         }
     }
 
-    override suspend fun getAllMedicineReminder(): Flow<List<MedicineReminder>> {
-        val realm = Realm.getDefaultInstance()
-        return realm.where(MedicineReminder::class.java)
-            .findAllAsync()
-            .toFlow()
-            .flowOn(Dispatchers.Main)
-            .map {
-                realm.copyFromRealm(it)
+
+
+    override suspend fun getAllMedicineReminder(): Flow<List<MedicineReminder>> = withContext(Dispatchers.Main) {
+        callbackFlow {
+            val realm = Realm.getDefaultInstance()
+            val results: RealmResults<MedicineReminder> = realm.where(MedicineReminder::class.java).findAllAsync()
+            val listener = RealmChangeListener<RealmResults<MedicineReminder>> { updatedResults ->
+                val list = (filterDatesLessThanOrEqualToToday(realm.copyFromRealm(updatedResults)))
+                trySend(list)
             }
-            .flowOn(Dispatchers.IO)
+            results.addChangeListener(listener)
+            awaitClose {
+                results.removeChangeListener(listener)
+                realm.close()
+            }
+        }.flowOn(Dispatchers.Main)
     }
 }

@@ -5,8 +5,10 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
 import info.mrprogrammer.mrpillstracker.core.data.data_soruce.sync_data_from_server.SyncDataDataSource
 import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineReminder
+import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineTakenStatus
 import info.mrprogrammer.mrpillstracker.core.frame_work.LocalDataBase
 import info.mrprogrammer.mrpillstracker.core.utils.FirebaseHelper.firebaseClearString
 import kotlinx.coroutines.CoroutineScope
@@ -24,14 +26,19 @@ class SyncDataRemoteDataSource @Inject constructor(private val localDataBase: Lo
 
         val key = "data"
         val currentUser = FirebaseAuth.getInstance().currentUser
-
         if (currentUser != null) {
             val url = currentUser.email.firebaseClearString() + "/pillsData"
             val ref = FirebaseDatabase.getInstance().getReference(key).child(url)
             ref.addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val data = snapshot.getValue(MedicineReminder::class.java)
-                    data?.id = snapshot.key ?: ""
+                    val map = snapshot.value as MutableMap<String, Any>
+                    map["id"] = snapshot.key ?: ""
+                    if (map.containsKey("takenStatus")) {
+                        val takenStatusList = (map["takenStatus"] as HashMap<String,Any>).toList().map { it.second }
+                        map.remove("takenStatus")
+                        map.put("takenStatus",takenStatusList)
+                    }
+                    val data = Gson().fromJson(Gson().toJson(map), MedicineReminder::class.java)
                     CoroutineScope(Dispatchers.IO).launch {
                         sharedFlow.emit(true)
                         localDataBase.insert(data as MedicineReminder)
@@ -40,11 +47,18 @@ class SyncDataRemoteDataSource @Inject constructor(private val localDataBase: Lo
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    val data = snapshot.getValue(MedicineReminder::class.java)
-                    data?.id = snapshot.key ?: ""
+                    val map = snapshot.value as MutableMap<String, Any>
+                    map["id"] = snapshot.key ?: ""
+                    if (map.containsKey("takenStatus")) {
+                        val takenStatusList = (map["takenStatus"] as HashMap<String,Any>).toList().map { it.second }
+                        map.remove("takenStatus")
+                        map.put("takenStatus",takenStatusList)
+                    }
+                    val data = Gson().fromJson(Gson().toJson(map), MedicineReminder::class.java)
                     CoroutineScope(Dispatchers.IO).launch {
                         sharedFlow.emit(true)
                         localDataBase.insert(data as MedicineReminder)
+                        println()
                     }
                 }
 

@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "info.mrprogrammer.mrpillstracker"
-        minSdk 24
+        minSdk 26
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -59,6 +59,7 @@ dependencies {
     implementation libs.firebase.auth
     implementation libs.firebase.database
     implementation libs.firebase.messaging
+    implementation libs.firebase.storage.ktx
     kapt libs.androidx.hilt.compiler
     implementation libs.androidx.core.splashscreen
     implementation libs.material
@@ -66,5 +67,9 @@ dependencies {
     kapt libs.hilt.compiler
     implementation libs.play.services.auth
     implementation libs.rxjava
+    implementation libs.circularprogressindicator
+    implementation(libs.coil)
+    implementation(libs.coil.svg)
+    implementation libs.gson
 }
 

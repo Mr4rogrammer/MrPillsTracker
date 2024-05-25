@@ -1,5 +1,6 @@
 package info.mrprogrammer.mrpillstracker.core.domain.model
 
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -14,9 +15,20 @@ open class MedicineReminder(
     var everyFiveReminder: Boolean = false,
     var noOfDay: String = "",
     var notification: String = "",
-    var pillDescription: String = "",
+    var pillDiscription: String = "",
     var pillName: String = "",
-    var selectedIcon: Int = 0,
+    var selectedicon: Int = 0,
     var time: String = "",
-    var usedPills: String = ""
+    var takenStatus: RealmList<MedicineTakenStatus>? = null
 ) : RealmObject()
+
+
+@RealmClass
+open class MedicineTakenStatus(
+    @PrimaryKey
+    var id:String = "",
+    var medicineId:String = "",
+    var date: String = "",
+    var time: String = "",
+    var status: String = "",
+): RealmObject()

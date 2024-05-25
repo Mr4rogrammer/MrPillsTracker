@@ -13,14 +13,28 @@ class SaveDataRemoteDataSource: SaveDataDataSource {
         val firebaseUser = FirebaseAuth.getInstance().currentUser ?: return false
         val userKey = firebaseUser.email.firebaseClearString()
         val baseKey = data.key
-        val dataKey = "$baseKey/$userKey"
+        var dataKey = "$baseKey/$userKey"
+        if (data.endKey != null) {
+            dataKey = "$baseKey/$userKey/${data.endKey}"
+        }
         val dataRef = FirebaseDatabase.getInstance().getReference(dataKey)
         return suspendCoroutine { continuation ->
-            dataRef.setValue(data.value).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    continuation.resume(true)
-                } else {
-                    continuation.resume(false)
+            if(data.type == "set") {
+                dataRef.setValue(data.value).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(true)
+                    } else {
+                        continuation.resume(false)
+                    }
+                }
+            } else {
+                val localRef = dataRef.push()
+                localRef.setValue(data.value).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(true)
+                    } else {
+                        continuation.resume(false)
+                    }
                 }
             }
         }
