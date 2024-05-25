@@ -2,6 +2,8 @@ package info.mrprogrammer.mrpillstracker.core.utils
 
 import android.app.Activity
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -13,6 +15,7 @@ import coil.request.ImageRequest
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import info.mrprogrammer.mrpillstracker.R
 import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineReminder
+import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineReminderWrapper
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -62,21 +65,38 @@ fun ImageView.loadUrl(url: String) {
     imageLoader.enqueue(request)
 }
 
-fun filterDatesLessThanOrEqualToToday(data: List<MedicineReminder>): List<MedicineReminder> {
+fun filterDatesLessThanOrEqualToToday(data: List<MedicineReminder>):MedicineReminderWrapper {
+    var totalMedicineForToday = 0
+    var totalMedicineTakenToday = 0
     val result = mutableListOf<MedicineReminder>()
     val today = LocalDate.now()
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
     try {
         result.addAll(
             data.filter {
                 val date = LocalDate.parse(it.date, dateFormatter)
-                date <= today && calculateRemainingDays(it.date, it.noOfDay.toLong()) > 0 && !filterTodayTaken(it)
+                val isMedicineTakenToday = filterTodayTaken(it)
+                if (isMedicineTakenToday) {
+                    totalMedicineTakenToday++
+                }
+                val isThisMedicineShouldTakeToday = date <= today
+                val remainingDays = calculateRemainingDays(it.date, it.noOfDay.toLong())
+                if (isThisMedicineShouldTakeToday && remainingDays > 0) {
+                    totalMedicineForToday++
+                }
+                isThisMedicineShouldTakeToday && remainingDays > 0 && !isMedicineTakenToday
             }
         )
     } catch (e: Exception) {
         e.printStackTrace()
     }
-    return sortModelsByTime(result)
+    val finalResult = sortModelsByTime(result)
+    val medicineReminderWrapper = MedicineReminderWrapper()
+    medicineReminderWrapper.totalMedicineForToday = totalMedicineForToday
+    medicineReminderWrapper.totalTakeMedicineToday = totalMedicineTakenToday
+    medicineReminderWrapper.reminders = finalResult
+    return medicineReminderWrapper
 }
 
 fun filterTodayTaken(medicineReminder: MedicineReminder): Boolean {
@@ -150,4 +170,20 @@ fun getCurrentDate(): String {
     val currentDate = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     return currentDate.format(formatter)
+}
+
+fun isConnected(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (connectivityManager != null) {
+        val info = connectivityManager.allNetworkInfo
+        if (info != null) {
+            for (networkInfo in info) {
+                if (networkInfo.state == NetworkInfo.State.CONNECTED) {
+                    return true
+                }
+            }
+        }
+    }
+    return false
 }

@@ -59,7 +59,8 @@ class DashBoardViewModel @Inject constructor(
 
         viewModelScope.launch {
             getMedicineDetails().collect {
-                _medicineDetails.value = it
+                _medicineDetails.value = it.reminders
+                calculateProgressAndUpdateMedicineDetailProgress(it.totalMedicineForToday, it.totalTakeMedicineToday)
             }
         }
     }
@@ -79,11 +80,18 @@ class DashBoardViewModel @Inject constructor(
         }
     }
 
-    fun calculateProgress() {
-        val progress = 50;
+    private fun calculateProgressAndUpdateMedicineDetailProgress(
+        totalMedicineForToday: Int,
+        totalTakeMedicineToday: Int
+    ) {
+        val progress = if(totalMedicineForToday > 0) {
+            (totalTakeMedicineToday.toDouble() / totalMedicineForToday) * 100
+        } else {
+            0.0
+        }
         viewModelScope.launch {
             CoroutineScope(Dispatchers.IO).launch {
-                for (i in 0..progress) {
+                for (i in 0..progress.toInt()) {
                     _medicineDetailProgress.value = i.toFloat()
                     delay(30)
                 }

@@ -1,10 +1,13 @@
 package info.mrprogrammer.mrpillstracker.Login.presenter.ui
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -83,7 +86,7 @@ class Login : AppCompatActivity() {
                         }
 
                         is LoginState.LoginSuccess -> {
-                            loginSuccess()
+                            requestPermission()
                         }
 
                         is LoginState.IDLE -> {
@@ -106,6 +109,13 @@ class Login : AppCompatActivity() {
         screenOpenAnimation()
     }
 
+    private fun requestPermission(){
+        if(ContextCompat.checkSelfPermission(applicationContext,android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+           loginSuccess()
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1134)
+        }
+    }
     private fun openGoogleLogin() {
         mAuth = FirebaseAuth.getInstance()
         createRequest()
@@ -134,6 +144,9 @@ class Login : AppCompatActivity() {
             } catch (e: ApiException) {
                 MrToast().error(this, e.toString())
             }
+        }
+        if (requestCode == 1134) {
+            loginSuccess()
         }
     }
 

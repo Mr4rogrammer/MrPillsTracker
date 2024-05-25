@@ -1,7 +1,6 @@
 package info.mrprogrammer.mrpillstracker.DashBoard.presenter.adapter
 
 import android.content.Context
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
-import coil.load
 import info.mrprogrammer.mrpillstracker.DashBoard.presenter.adapter.helper.AdapterHelper
 import info.mrprogrammer.mrpillstracker.DashBoard.presenter.adapter.helper.AdapterHelper.speak
-import info.mrprogrammer.mrpillstracker.DashBoard.presenter.ui.DashBoard
 import info.mrprogrammer.mrpillstracker.R
 import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineReminder
 import info.mrprogrammer.mrpillstracker.core.utils.calculateRemainingDays
@@ -21,8 +17,11 @@ import info.mrprogrammer.mrpillstracker.core.utils.convertTo12HourFormat
 import info.mrprogrammer.mrpillstracker.core.utils.loadUrl
 
 
-class RecyclerViewAdapter(private val itemList: List<MedicineReminder>, private val context: Context) : RecyclerView.Adapter<MyViewHolder>(){
-    private var lastDisplayedTime:String = ""
+class RecyclerViewAdapter(
+    private val itemList: List<MedicineReminder>,
+    private val context: Context
+) : RecyclerView.Adapter<MyViewHolder>() {
+    private var lastDisplayedTime: String = ""
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -48,7 +47,9 @@ class RecyclerViewAdapter(private val itemList: List<MedicineReminder>, private 
         }
 
         holder.medicineName.setText(item.pillName)
-        holder.medicineNameAfterMeal.text = "take 1 ${item.pillName} before meal".takeIf { item.afterOrBefore == "BEFORE" } ?:"take 1 ${item.pillName} after meal"
+        holder.medicineNameAfterMeal.text =
+            "take 1 ${item.pillName} before meal".takeIf { item.afterOrBefore == "BEFORE" }
+                ?: "take 1 ${item.pillName} after meal"
         holder.medicineImage.loadUrl(AdapterHelper.getIconUrl(item.selectedicon))
         holder.medicineNumberOfDays.text = "${reamingDate} days"
 

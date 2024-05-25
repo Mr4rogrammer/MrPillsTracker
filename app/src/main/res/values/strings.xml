@@ -5,4 +5,8 @@
     <string name="access_mr_health">Access Mr.Health</string>
     <string name="hey">Hey, %1$s</string>
     <string name="your_plan_nis_almost_done">Your plan \nis almost done !</string>
+    <string name="yet_to_start_your_plan">Yet to start your\nplan !</string>
+    <string name="you_have_reach_half_of_your_plan">You have reach half \nof your plan !</string>
+    <string name="you_have_reach_your_plan">You have successfully\n reach your plan !</string>
+
 </resources>

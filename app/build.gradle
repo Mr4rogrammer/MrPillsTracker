@@ -60,6 +60,7 @@ dependencies {
     implementation libs.firebase.database
     implementation libs.firebase.messaging
     implementation libs.firebase.storage.ktx
+    implementation libs.androidx.work.runtime
     kapt libs.androidx.hilt.compiler
     implementation libs.androidx.core.splashscreen
     implementation libs.material

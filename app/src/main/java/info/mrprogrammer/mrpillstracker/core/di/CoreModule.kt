@@ -100,4 +100,5 @@ object CoreModule {
     fun getGetMedicationReminderData(dataRepository: DataRepository):GetMedicationReminderData {
         return GetMedicationReminderData(dataRepository)
     }
+
 }

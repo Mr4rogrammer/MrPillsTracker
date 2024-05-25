@@ -1,6 +1,8 @@
 package info.mrprogrammer.mrpillstracker.core
 
 import android.app.Application
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.disk.DiskCache
@@ -8,13 +10,17 @@ import coil.memory.MemoryCache
 import coil.util.DebugLogger
 import dagger.hilt.android.HiltAndroidApp
 import info.mrprogrammer.mrpillstracker.R
+import info.mrprogrammer.mrpillstracker.core.WorkManager.MyWorker
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import java.util.concurrent.TimeUnit
+
 
 @HiltAndroidApp
 class MainApplication: Application(), ImageLoaderFactory {
     override fun onCreate() {
         initModules()
+        workManagerCall()
         super.onCreate()
     }
 
@@ -47,5 +53,12 @@ class MainApplication: Application(), ImageLoaderFactory {
             .logger(DebugLogger())
             .respectCacheHeaders(false)
             .build()
+    }
+
+    private fun workManagerCall() {
+        val myWork: OneTimeWorkRequest = OneTimeWorkRequest.Builder(MyWorker::class.java)
+            .setInitialDelay(1, TimeUnit.MINUTES)
+            .build()
+        WorkManager.getInstance(applicationContext).enqueue(myWork)
     }
 }

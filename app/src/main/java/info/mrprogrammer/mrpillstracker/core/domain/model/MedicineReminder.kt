@@ -19,7 +19,9 @@ open class MedicineReminder(
     var pillName: String = "",
     var selectedicon: Int = 0,
     var time: String = "",
-    var takenStatus: RealmList<MedicineTakenStatus>? = null
+    var takenStatus: RealmList<MedicineTakenStatus>? = null,
+    var totalMedicineForToday: Int = 0,
+    var totalTakeMedicineToday:Int = 0
 ) : RealmObject()
 
 

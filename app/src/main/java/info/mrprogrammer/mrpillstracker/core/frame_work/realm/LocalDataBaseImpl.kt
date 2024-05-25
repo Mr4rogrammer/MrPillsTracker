@@ -2,6 +2,7 @@ package info.mrprogrammer.mrpillstracker.core.frame_work.realm
 
 import androidx.appcompat.widget.ThemedSpinnerAdapter.Helper
 import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineReminder
+import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineReminderWrapper
 import info.mrprogrammer.mrpillstracker.core.frame_work.LocalDataBase
 import info.mrprogrammer.mrpillstracker.core.utils.filterDatesLessThanOrEqualToToday
 import io.realm.Realm
@@ -39,7 +40,7 @@ class LocalDataBaseImpl: LocalDataBase {
 
 
 
-    override suspend fun getAllMedicineReminder(): Flow<List<MedicineReminder>> = withContext(Dispatchers.Main) {
+    override suspend fun getAllMedicineReminder(): Flow<MedicineReminderWrapper> = withContext(Dispatchers.Main) {
         callbackFlow {
             val realm = Realm.getDefaultInstance()
             val results: RealmResults<MedicineReminder> = realm.where(MedicineReminder::class.java).findAllAsync()
