@@ -1,5 +1,6 @@
 package info.mrprogrammer.mrpillstracker.DashBoard.presenter.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -17,6 +18,7 @@ import info.mrprogrammer.mrpillstracker.DashBoard.presenter.adapter.RecyclerView
 import info.mrprogrammer.mrpillstracker.DashBoard.presenter.adapter.helper.SwipeToDeleteCallBack
 import info.mrprogrammer.mrpillstracker.DashBoard.presenter.viewmodel.DashBoardViewModel
 import info.mrprogrammer.mrpillstracker.R
+import info.mrprogrammer.mrpillstracker.booking.Booking
 import info.mrprogrammer.mrpillstracker.core.StatusBarHelper
 import info.mrprogrammer.mrpillstracker.core.domain.model.MedicineReminder
 import info.mrprogrammer.mrpillstracker.core.domain.model.UserDataModel
@@ -73,6 +75,10 @@ class DashBoard : AppCompatActivity() {
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallBack)
         itemTouchHelper.attachToRecyclerView(root.medicineData)
         root.medicineData.adapter = adapter
+
+        root.booking.setOnClickListener {
+            startActivity(Intent(this, Booking::class.java))
+        }
     }
 
     private fun initializeCollector() {

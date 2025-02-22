@@ -43,7 +43,7 @@ class LocalDataBaseImpl: LocalDataBase {
     override suspend fun getAllMedicineReminder(): Flow<MedicineReminderWrapper> = withContext(Dispatchers.Main) {
         callbackFlow {
             val realm = Realm.getDefaultInstance()
-            val results: RealmResults<MedicineReminder> = realm.where(MedicineReminder::class.java).findAllAsync()
+            val results: RealmResults<MedicineReminder> = realm.where(MedicineReminder::class.java).findAll()
             val listener = RealmChangeListener<RealmResults<MedicineReminder>> { updatedResults ->
                 val list = (filterDatesLessThanOrEqualToToday(realm.copyFromRealm(updatedResults)))
                 trySend(list)

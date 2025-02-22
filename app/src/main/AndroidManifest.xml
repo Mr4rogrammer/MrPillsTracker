@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:name=".core.MainApplication"
         android:allowBackup="true"
@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MrPillsTracker"
         tools:targetApi="31">
+        <activity
+            android:name=".booking.Booking"
+            android:exported="false" />
         <activity
             android:name=".DashBoard.presenter.ui.DashBoard"
             android:exported="false" />

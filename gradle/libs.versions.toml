@@ -11,9 +11,11 @@ glide = "4.15.0"
 gson = "2.10.1"
 hiltAndroid = "2.51"
 hiltAndroidCompiler = "2.51"
+hiltAndroidCompilerVersion = "2.44"
+hiltAndroidVersion = "2.44"
 hiltCompiler = "1.2.0"
 koinAndroid = "3.1.2"
-kotlin = "1.9.0"
+kotlin = "1.9.21"
 coreKtx = "1.13.1"
 appcompat = "1.6.1"
 kotlinxCoroutinesCore = "1.8.0"
@@ -47,6 +49,8 @@ firebase-ui-storage = { module = "com.firebaseui:firebase-ui-storage", version.r
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler-v244 = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
+hilt-android-v244 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesCore" }
