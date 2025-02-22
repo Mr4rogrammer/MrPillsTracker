@@ -8,12 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +28,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import info.mrprogrammer.mrpillstracker.R
 import info.mrprogrammer.mrpillstracker.core.utils.FirebaseHelper.firebaseClearString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
 import kotlin.coroutines.resume
@@ -35,12 +42,13 @@ class Booking : AppCompatActivity() {
         setContent {
             var nameStatusList by remember { mutableStateOf<List<Triple<String,String, String>>>(emptyList()) }
 
+
             suspend fun getData() {
                 val currentUser = FirebaseAuth.getInstance().currentUser
                 if (currentUser != null) {
                     val url = "data/"+currentUser.email.firebaseClearString() + "/booking"
                     val dataRef = FirebaseDatabase.getInstance().getReference(url)
-                    dataRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    dataRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val tempList = mutableListOf<Triple<String, String, String>>()
                             for (child in snapshot.children) {
@@ -61,12 +69,13 @@ class Booking : AppCompatActivity() {
                 }
             }
 
+
             LaunchedEffect(Unit) {
                 getData()
             }
-
             Column(modifier = Modifier.fillMaxSize()) {
                 Box(modifier = Modifier.weight(1f)) {
+                    Text("Doctor Appointment", Modifier.padding(5.dp).padding(bottom = 20.dp), fontSize = 20.sp)
                     NameStatusListScreen(
                         data = nameStatusList
                     )
@@ -74,18 +83,18 @@ class Booking : AppCompatActivity() {
                 Box(modifier = Modifier.weight(1f)) {
                     BookingScreen() { text, date ->
                         val currentUser = FirebaseAuth.getInstance().currentUser
+                        val id = UUID.randomUUID().toString()
                         val map = hashMapOf(
+                            "id" to id,
                             "text" to text,
                             "date" to date,
                             "status" to "Waiting For Conformation"
                         )
                         if (currentUser != null) {
-                            val url = "data/"+currentUser.email.firebaseClearString() + "/booking/${UUID.randomUUID()}"
+                            val url = "data/"+currentUser.email.firebaseClearString() + "/booking/${id}"
                             val dataRef = FirebaseDatabase.getInstance().getReference(url)
                             dataRef.setValue(map).addOnCompleteListener {
-                               lifecycleScope.launch {
-                                   getData()
-                               }
+
                             }
                         }
                     }
